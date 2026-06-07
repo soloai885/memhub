@@ -19,7 +19,7 @@ interface MemoryRow {
   content: string;
   decisions: string | null;
   action_items: string | null;
-  created_at: string;
+  created_at: string | Date;
 }
 
 function buildContext(line: ProjectLineRow, memories: MemoryRow[]): string {
@@ -30,7 +30,10 @@ function buildContext(line: ProjectLineRow, memories: MemoryRow[]): string {
   if (memories.length > 0) {
     ctx += '\n最近記憶：\n';
     for (const mem of memories) {
-      ctx += `[${mem.created_at.slice(0, 10)} ${mem.memory_type}] ${mem.content}`;
+      const dateStr = mem.created_at
+        ? new Date(mem.created_at).toISOString().slice(0, 10)
+        : '';
+      ctx += `[${dateStr} ${mem.memory_type}] ${mem.content}`;
       if (mem.decisions) ctx += `\n決策：${mem.decisions}`;
       if (mem.action_items) {
         try {
