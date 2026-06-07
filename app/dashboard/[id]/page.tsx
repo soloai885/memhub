@@ -175,7 +175,9 @@ function DetailContent() {
           next_deadline: form.next_deadline || null,
           assignee: form.assignee.trim() || null,
           action_items: parsedActionItems,
-          decisions: form.decisions.trim() || null,
+          decisions: form.decisions.trim()
+            ? form.decisions.trim().split(/[\n,]/).map((s) => s.trim()).filter(Boolean)
+            : [],
         }),
       });
       if (!res.ok) throw new Error('API error');
